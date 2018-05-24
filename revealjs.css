@@ -1,0 +1,11 @@
+.section-number-2, .section-number-3 {
+    opacity: 0.4;
+}
+
+.author {
+    opacity: 0.5;
+}
+
+img, .org-svg {
+    max-height: 500px !important;
+}

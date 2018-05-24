@@ -1,0 +1,128 @@
+#+TITLE: Git and Gitflow
+#+REVEAL_THEME: solarized
+#+REVEAL_TRANS: fade
+#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_EXTRA_CSS: revealjs.css
+#+OPTIONS: reveal_history:t toc:nil timestamp:nil
+
+* Gitflow
+
+http://nvie.com/posts/a-successful-git-branching-model/
+
+ - ~develop~ - where work happens
+ - ~master~ - what's in production
+ - Feature, release, and hotfix branches
+ - Version tags for releases
+
+** Branch naming
+
+ - Use ~/~ to group related branches (~feature/~, ~release/~, etc.)
+ - Include the ticket number for feature/bug fix branches
+ - Give short-lived branches descriptive names
+ - Use either a dash or underscore instead of a space
+
+*Example:*
+
+~feature/123_rewrite_everything~
+
+** Releasing
+
+ - Create a release branch
+ - Work on release tasks (bug fixes, documentation, etc)
+ - Merge branch into ~master~ and tag the release
+ - Merge ~master~ to ~develop~
+
+** Hot fixes
+
+ - Only branches to start from ~master~
+ - Merge into *both* ~master~ and ~develop~
+ - Supports releasing bug fixes to production without including new
+   features and other work
+
+** Tools for working with Gitflow
+
+ - CLI tool: https://github.com/nvie/gitflow
+ - Magit (Emacs) extension: https://github.com/jtatarik/magit-gitflow
+ - *Git Tower* and *Sourcetree* have built-in support
+ - Or... just use git directly
+
+* GitLab Flow
+
+https://gitlab.com/help/workflow/gitlab_flow.md
+
+ - Simpler alternative to Gitflow
+ - Very similar to GitHub Flow
+ - Work in ~master~ instead of ~develop~
+ - Good for a continuous deployment model
+ - Use ~pre-production~ and ~production~ branches
+
+* Git Best Practices
+
+** Writing commit messages
+
+ - Two audiences: code reviewers and bug fixers
+ - Be descriptive!
+ - Use present tense, imperative mood
+ - Don't use a period in the first line
+ - Describe /what/ and /why/, not /how/
+ - Reference a related ticket when possible
+
+** Merge vs rebase
+
+*When to use merge:*
+
+ - Creates a merge commit when necessary
+ - Used for merge/pull requests
+
+*When to use rebase*:
+
+ - Rewrites commits on top of other commits
+ - Only for unpushed commits or feature branches
+ - When pulling changes from the develop branch
+ - Leaves a cleaner git history
+
+** Deploying to production
+
+*Less than ideal:*
+
+ + Use CI/CD to deploy to a dev site (good!)
+ + But... manually merging to ~master~ and deploying from a dev's laptop
+
+*Better way:*
+
+ * Lock the ~master~ branch so no one can directly push to it
+ * Use merge requests to merge from ~develop~ to ~master~
+ * Use CI/CD to deploy to production from ~master~
+
+* Git Tips & Tricks
+
+** Git Bisect
+
+ - Used to find when a bug was introduced
+ - Uses a binary search to locate the first bad commit
+ - Start with a known good commit and the current branch
+ - Test each commit manually - good/bad
+ - Eventually one commit left - first bad commit
+
+** Using different email addresses
+
+Add the following to ~~/.gitconfig~:
+
+#+BEGIN_SRC conf
+[user]
+  name = Michael Spencer
+  email = sonrisesoftware@gmail.com
+
+[includeIf "gitdir:~/Developer/Lelander/"]
+  path = .gitconfig-lelander
+#+END_SRC
+
+And put your custom config in the included config file:
+
+#+BEGIN_SRC conf
+[user]
+   name = Michael Spencer
+   email = michael@lelander.com
+#+END_SRC
+
+* That's it!
